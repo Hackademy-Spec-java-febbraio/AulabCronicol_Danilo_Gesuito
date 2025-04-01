@@ -8,5 +8,4 @@ import it.aulab.progetto_finale_danilo_gesuito.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
-    
 }
