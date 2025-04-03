@@ -12,7 +12,10 @@
         </div>
     </div>
 
+    <div th:if="${successMessage}" class="alert alert-success">
+        <div th:text="${successMessage}"></div>
     </div>
+    
     <article class="container-fluid">
         <section class="row ms-5 vh-100 align-items-center">
             <div class="col-10">

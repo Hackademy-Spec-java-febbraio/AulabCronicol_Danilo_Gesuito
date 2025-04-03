@@ -48,7 +48,13 @@
                         </ul>
                     </li>
                 </ul>
-                <div sec:authorize="isAuthenticated" th:text="'Benvenuto: + '${#authentication.principal.fullname} + ' - ' + ${#authentication.principal.authorities[0].authority.replace('ROLE_','')}">Benvenuto</div>
+                
+                <div th:if="${#authentication != null}">
+                    <span th:text="'Benvenuto: ' + (${#authentication.principal.fullname} ?: 'Ospite') + ' - ' + (${#authentication.principal.authorities[0].authority} ?: '')?.replace('ROLE_', '')"></span>
+                </div>
+                <div th:unless="${#authentication != null}">
+                    <span>Accedi per visualizzare il tuo nome.</span>  <!-- O un link per accedere -->
+                </div>
             </div>
             <form class="d-flex" role="search">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
