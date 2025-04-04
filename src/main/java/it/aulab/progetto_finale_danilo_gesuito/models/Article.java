@@ -48,5 +48,9 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnoreProperties({"articles"})
+    private User user;
+
+    @ManyToOne
+    @JsonIgnoreProperties({"articles"})
     private Category category;
 }

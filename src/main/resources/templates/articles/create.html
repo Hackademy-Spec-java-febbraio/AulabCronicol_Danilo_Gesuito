@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{index::head}"></head>
+<body>
+    <div th:insert="~{index::navbar}"></div>
+    <div class="min-vh-100">
+        <div class="container">
+            <div class="row">
+                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
+                    <h1 th:text="${title}">Inserisci un Articolo</h1>
+                </div>
+            </div>
+            <div class="col-12 my-5">
+                <form th:action="@{/articles}" th:object="${article}" method="POST" enctype="multipart/form-data">
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label for="articleTitle" class="form-label">Titolo</label>
+                            <input type="text" class="form-control" id="articleTitle" placeholder="Titolo dell'articolo" th:field="*{title}">
+                            <p th:errors="*{title}" class="text-danger" th:if="${#fields.hasErrors('title')}"></p>
+                        </div>
+                        <div class="col">
+                            <label for="subtitle" class="form-label">Sottotitolo</label>
+                            <input type="text" class="form-control" id="subtitle" placeholder="Sottotitolo dell'articolo" th:field="*{subtitle}">
+                            <p th:errors="*{subtitle}" class="text-danger" th:if="${#fields.hasErrors('subtitle')}"></p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="body" class="form-label">Articolo:</label>
+                        <textarea class="form-control" id="body" placeholder="Inserisci il testo dell'articolo" th:field="*{body}"></textarea>
+                        <p th:errors="*{body}" class="text-danger" th:if="${#fields.hasErrors('body')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Data di pubblicazione:</label>
+                        <input type="date" class="form-control" id="date" placeholder="yyyyMMdd" th:field="*{publishDate}" pattern="\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])">
+                        <p th:errors="*{publishDate}" class="text-danger" th:if="${#fields.hasErrors('publishDate')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Categoria:</label>
+                        <select id="category" class="form-select" th:field="*{category}">
+                            <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
+                        </select>
+                        <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Immagine:</label>
+                        <input type="file" class="form-control" id="image" name="file"/>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Crea Articolo</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div th:insert="~{index::footer}"></div>
+    <div th:replace="~{index::bootstrapScript}"></div>
+</body>
+</html>
