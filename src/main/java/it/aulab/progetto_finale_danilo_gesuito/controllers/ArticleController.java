@@ -33,7 +33,7 @@ public class ArticleController {
     private ArticleService articleService;
     
     // Rotta per la creazione di un articolo //
-    @GetMapping("create")
+    @GetMapping("/create")
     public String articleCreate(Model viewModel){
         viewModel.addAttribute("title", "Crea un articolo");
         viewModel.addAttribute("article", new Article());

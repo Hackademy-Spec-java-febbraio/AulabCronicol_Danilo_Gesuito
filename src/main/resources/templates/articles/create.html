@@ -31,8 +31,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="date" class="form-label">Data di pubblicazione:</label>
-                        <input type="date" class="form-control" id="date" placeholder="yyyyMMdd" th:field="*{publishDate}" pattern="\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\d|3[01])">
-                        <p th:errors="*{publishDate}" class="text-danger" th:if="${#fields.hasErrors('publishDate')}"></p>
+                        <input type="date" class="form-control" id="date" placeholder="yyyyMMdd" th:field="*{publish_date}">
+                        <p th:errors="*{publish_date}" class="text-danger" th:if="${#fields.hasErrors('publish_date')}"></p>
                     </div>
                     <div class="mb-3">
                         <label for="category" class="form-label">Categoria:</label>

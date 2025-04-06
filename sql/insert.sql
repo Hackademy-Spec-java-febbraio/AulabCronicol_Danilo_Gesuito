@@ -9,5 +9,11 @@
 
 -- insert into categories (name) values ('politica'), ('economia'), ('food&drink'), ('sport'), ('intrattenimento'), ('tech');
 
+-- ALTER TABLE articles DROP COLUMN publishdate;
+
+-- ALTER TABLE articles MODIFY publish_date DATETIME;
+
+
+
 
 
