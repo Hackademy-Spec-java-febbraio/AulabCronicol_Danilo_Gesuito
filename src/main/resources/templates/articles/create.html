@@ -6,11 +6,11 @@
     <div class="min-vh-100">
         <div class="container">
             <div class="row">
-                <div class="col-12 my-5 d-flex justify-content-between align-items-center">
+                <div class="col-12 my-5 d-flex justify-content-center align-items-center">
                     <h1 th:text="${title}">Inserisci un Articolo</h1>
                 </div>
             </div>
-            <div class="col-12 my-5">
+            <div class="col-12 my-4">
                 <form th:action="@{/articles}" th:object="${article}" method="POST" enctype="multipart/form-data">
                     <div class="row mb-3">
                         <div class="col">
@@ -45,7 +45,9 @@
                         <label for="image" class="form-label">Immagine:</label>
                         <input type="file" class="form-control" id="image" name="file"/>
                     </div>
-                    <button type="submit" class="btn btn-primary">Crea Articolo</button>
+                    <div class="text-center my-4">
+                        <button type="submit" class="btn btn-primary text-center">Crea Articolo</button>
+                    </div>
                 </form>
             </div>
         </div>

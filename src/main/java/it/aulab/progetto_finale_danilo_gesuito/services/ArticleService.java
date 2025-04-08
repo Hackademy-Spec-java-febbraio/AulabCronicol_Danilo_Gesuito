@@ -2,6 +2,7 @@ package it.aulab.progetto_finale_danilo_gesuito.services;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
 
     @Autowired
     private ArticleRepository articleReository;
+
+    @Autowired
+    private ImageService imageService;
     
     @Autowired
     private ModelMapper modelMapper;
@@ -44,6 +48,8 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
     
     @Override
     public ArticleDto create(Article article, Principal principal, MultipartFile file) {
+        String url = "";
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -51,7 +57,20 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
             article.setUser(user);
         }
 
+        if (!file.isEmpty()) {
+            try {
+                CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                url = futureUrl.get();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        }
+
         ArticleDto dto = modelMapper.map(articleReository.save(article), ArticleDto.class);
+        if (!file.isEmpty()) {
+            imageService.saveImageOnDB(url, article);
+        }
         return dto;
     }
     
