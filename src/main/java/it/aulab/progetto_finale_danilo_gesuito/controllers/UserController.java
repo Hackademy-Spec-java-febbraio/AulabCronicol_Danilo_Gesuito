@@ -36,16 +36,18 @@ public class UserController {
     // Rotta della Home //
     @GetMapping("/")
     public String home(Model viewModel){
-
-        List<ArticleDto> articles = articleService.readAll();
-
-        // ordino e invio al template gli articoli in base alla data di pubblicazione in ordine decrescente
-        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
-
-        List<ArticleDto> lastThreeArticles = articles.stream().limit(3).collect(Collectors.toList());
         
+        List<ArticleDto> articles = articleService.readAll();
+        
+        // Ordina gli articoli per data in ordine decrescente
+        articles.sort(Comparator.comparing(
+        ArticleDto::getPublishDate,
+        Comparator.nullsLast(Comparator.naturalOrder()) // Gestisce i null
+        ).reversed()); // Inverte l'ordine per avere i più recenti prima
+        
+        // Prendi solo gli ultimi 3 *dopo* aver ordinato correttamente
+        List<ArticleDto> lastThreeArticles = articles.stream().limit(3).collect(Collectors.toList());
         viewModel.addAttribute("articles", lastThreeArticles);
-
         return "home";
     }
     

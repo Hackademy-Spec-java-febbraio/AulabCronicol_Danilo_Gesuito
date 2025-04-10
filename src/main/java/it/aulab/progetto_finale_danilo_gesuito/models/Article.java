@@ -44,7 +44,7 @@ public class Article {
 
     @Column(nullable = false, length = 8)
     @NotEmpty
-    private String publish_date;
+    private String publishDate;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

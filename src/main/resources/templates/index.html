@@ -20,7 +20,7 @@
     <!--* Inizio NAVBAR -->
     <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Aulab Chronicles</a>
+            <a class="navbar-brand" href="/">Aulab Chronicles</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
@@ -30,10 +30,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li sec:authorize="isAuthenticated" class="nav-item">
-                        <a class="nav-link" href="/article/create">Crea Articolo</a>
+                        <a class="nav-link" href="/articles/create">Crea Articolo</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/article/articles">Tutti gli articoli</a>
+                        <a class="nav-link" href="/articles/articles">Tutti gli articoli</a>
                     </li>
                     <li class="nav-item dropdown ">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

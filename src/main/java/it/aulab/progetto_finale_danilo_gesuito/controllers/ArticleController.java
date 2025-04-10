@@ -1,7 +1,6 @@
 package it.aulab.progetto_finale_danilo_gesuito.controllers;
 
 import java.security.Principal;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -28,29 +27,33 @@ import jakarta.validation.Valid;
 
 
 @Controller
-@RequestMapping("/article")
+@RequestMapping("/articles")
 public class ArticleController {
     
     @Autowired
     @Qualifier("categoryService")
     private CrudService<CategoryDto,Category,Long> categoryService;
-
+    
     @Autowired
     private ArticleService articleService;
-
+    
     // Rotta per la visualizzazione di tutti gli articoli //
-    @GetMapping
+    @GetMapping("/articles")
     public String articleIndex(Model viewModel){
         viewModel.addAttribute("title", "Tutti gli articoli");
-
+        
         List<ArticleDto> articles = articleService.readAll();
-
-        Collections.sort(articles, Comparator.comparing(ArticleDto::getPublishDate).reversed());
-        viewModel.addAttribute("article", articles);
-
+        
+        // Ordina gli articoli per data in ordine decrescente
+        articles.sort(Comparator.comparing(
+        ArticleDto::getPublishDate,
+        Comparator.nullsLast(Comparator.naturalOrder()) // Gestisce i null
+        ).reversed());
+        viewModel.addAttribute("articles", articles);
+        
         return "article/articles";
     }
-
+    
     // Rotta per la creazione di un articolo //
     @GetMapping("/create")
     public String articleCreate(Model viewModel){
@@ -63,18 +66,18 @@ public class ArticleController {
     // Rotta per lo store di un articolo //
     @PostMapping
     public String articleStore(@Valid @ModelAttribute("article") Article article,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes,
-                                Principal principal,
-                                MultipartFile file,
-                                Model viewModel){ 
+    BindingResult result,
+    RedirectAttributes redirectAttributes,
+    Principal principal,
+    MultipartFile file,
+    Model viewModel){ 
         
         // controllo degli errori //
         if (result.hasErrors()) {
             viewModel.addAttribute("title", "Crea un articolo");
             viewModel.addAttribute("article", article);
             viewModel.addAttribute("categories", categoryService.readAll());
-            return "articles/create";
+            return "article/create";
         }
         
         // salvataggio dell'articolo //
@@ -82,10 +85,17 @@ public class ArticleController {
         redirectAttributes.addFlashAttribute("successMessage", "Articolo creato con successo!");
         return "redirect:/";
     }
-
+    
     // Rotta per la visualizzazione di un singolo articolo //
     @GetMapping("detail/{id}")
     public String detailArticle(@PathVariable("id") Long id, Model modelView) {
+
+        ArticleDto articleDto = articleService.read(id);
+        if (articleDto == null) {
+            // Potresti reindirizzare a una pagina di errore o alla lista articoli
+            return "redirect:/"; // O mostra una pagina 404 specifica
+        }
+
         modelView.addAttribute("article", "Article detail");
         modelView.addAttribute("article", articleService.read(id));
         return "article/detail";
