@@ -16,9 +16,6 @@ import it.aulab.progetto_finale_danilo_gesuito.models.Category;
 import it.aulab.progetto_finale_danilo_gesuito.services.ArticleService;
 import it.aulab.progetto_finale_danilo_gesuito.services.CategoryService;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
-
 @Controller
 @RequestMapping("/categories")
 public class CategoryController {

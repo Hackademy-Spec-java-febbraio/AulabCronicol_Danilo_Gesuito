@@ -1,6 +1,5 @@
 package it.aulab.progetto_finale_danilo_gesuito.controllers;
 
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,13 +15,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.aulab.progetto_finale_danilo_gesuito.services.ArticleService;
+import it.aulab.progetto_finale_danilo_gesuito.services.CategoryService;
 import it.aulab.progetto_finale_danilo_gesuito.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import it.aulab.progetto_finale_danilo_gesuito.models.User;
+import it.aulab.progetto_finale_danilo_gesuito.repositories.CareerRequestRepository;
 import it.aulab.progetto_finale_danilo_gesuito.dtos.ArticleDto;
 import it.aulab.progetto_finale_danilo_gesuito.dtos.UserDto;
+
 
 @Controller
 public class UserController {
@@ -32,6 +34,11 @@ public class UserController {
     
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private CareerRequestRepository careerRequestRepository;
+    @Autowired
+    private CategoryService categoryService;
     
     // Rotta della Home //
     @GetMapping("/")
@@ -98,5 +105,14 @@ public class UserController {
         viewModel.addAttribute("articles", articles);
         
         return "article/articles";
+    }
+
+    // rotta per la dashboard dell'admin
+    @GetMapping("/admin/dashboard")
+    public String adminDashboard(Model viewModel) {
+        viewModel.addAttribute("title", "Richieste ricevute");
+        viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "admin/dashboard";
     }
 }

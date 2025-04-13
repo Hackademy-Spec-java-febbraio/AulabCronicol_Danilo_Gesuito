@@ -24,7 +24,7 @@ public class CareerRequest {
     @Column(nullable = false, length = 1000)
     private String body;
     @Column
-    private String isChecked;
+    private Boolean isChecked;
 
     @OneToOne
     @JoinColumn(name = "user_id")
