@@ -6,12 +6,16 @@ import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import it.aulab.progetto_finale_danilo_gesuito.dtos.CategoryDto;
+import it.aulab.progetto_finale_danilo_gesuito.models.Article;
 import it.aulab.progetto_finale_danilo_gesuito.models.Category;
 import it.aulab.progetto_finale_danilo_gesuito.repositories.CategoryRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CategoryService implements CrudService<CategoryDto, Category, Long> {
@@ -38,20 +42,37 @@ public class CategoryService implements CrudService<CategoryDto, Category, Long>
 
     @Override
     public CategoryDto create(Category model, Principal principal, MultipartFile file) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
+        return modelMapper.map(categoryRepository.save(model), CategoryDto.class);
     }
 
     @Override
     public CategoryDto update(Long key, Category model, MultipartFile file) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        if (categoryRepository.existsById(key)) {
+            model.setId(key);
+            return modelMapper.map(categoryRepository.save(model), CategoryDto.class);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
-    public void delete(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    @Transactional
+    public void delete(Long id) {
+        if (categoryRepository.existsById(id)) {
+            
+            Category category = categoryRepository.findById(id).get();
+
+            if (category.getArticles() != null) {
+                Iterable<Article> articles = category.getArticles();
+                for (Article article: articles) {
+                    article.setCategory(null);
+                }
+            }
+
+            categoryRepository.delete(category);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
     
 }
