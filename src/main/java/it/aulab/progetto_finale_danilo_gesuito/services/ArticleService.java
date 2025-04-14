@@ -78,6 +78,8 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
             }
             
         }
+
+        article.setIsAccepted(null);
         
         ArticleDto dto = modelMapper.map(articleRepository.save(article), ArticleDto.class);
         if (!file.isEmpty()) {

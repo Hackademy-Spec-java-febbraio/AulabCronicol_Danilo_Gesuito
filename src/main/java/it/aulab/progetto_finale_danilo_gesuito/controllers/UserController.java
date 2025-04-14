@@ -1,9 +1,11 @@
 package it.aulab.progetto_finale_danilo_gesuito.controllers;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +22,9 @@ import it.aulab.progetto_finale_danilo_gesuito.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import it.aulab.progetto_finale_danilo_gesuito.models.Article;
 import it.aulab.progetto_finale_danilo_gesuito.models.User;
+import it.aulab.progetto_finale_danilo_gesuito.repositories.ArticleRepository;
 import it.aulab.progetto_finale_danilo_gesuito.repositories.CareerRequestRepository;
 import it.aulab.progetto_finale_danilo_gesuito.dtos.ArticleDto;
 import it.aulab.progetto_finale_danilo_gesuito.dtos.UserDto;
@@ -36,15 +40,25 @@ public class UserController {
     private ArticleService articleService;
 
     @Autowired
+    private ArticleRepository articleRepository;
+
+    @Autowired
     private CareerRequestRepository careerRequestRepository;
+
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ModelMapper modelMapper;
     
     // Rotta della Home //
     @GetMapping("/")
     public String home(Model viewModel){
         
-        List<ArticleDto> articles = articleService.readAll();
+        List<ArticleDto> articles = new ArrayList<ArticleDto>();
+        for (Article article: articleRepository.findByIsAcceptedTrue()){
+            articles.add(modelMapper.map(article, ArticleDto.class));
+        }
         
         // Ordina gli articoli per data in ordine decrescente
         articles.sort(Comparator.comparing(
@@ -114,5 +128,13 @@ public class UserController {
         viewModel.addAttribute("requests", careerRequestRepository.findByIsCheckedFalse());
         viewModel.addAttribute("categories", categoryService.readAll());
         return "admin/dashboard";
+    }
+
+    // rotta per la dasboard del revisor
+    @GetMapping("/revisor/dashboard")
+    public String revisorDashboard(Model viewModel) {
+        viewModel.addAttribute("title", "Articoli da revisionare");
+        viewModel.addAttribute("requests", articleRepository.findByIsAcceptedIsNull());
+        return "revisor/dashboard";
     }
 }

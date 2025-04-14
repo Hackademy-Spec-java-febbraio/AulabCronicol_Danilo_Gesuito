@@ -11,6 +11,9 @@
 
 -- ALTER TABLE articles MODIFY publish_date DATETIME;
 
+-- ALTER TABLE articles ADD COLUMN is_accepted BOOLEAN;
+
+
 
 
 

@@ -68,7 +68,6 @@ public class CategoryService implements CrudService<CategoryDto, Category, Long>
                     article.setCategory(null);
                 }
             }
-
             categoryRepository.delete(category);
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
