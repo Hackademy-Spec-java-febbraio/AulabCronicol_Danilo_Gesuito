@@ -10,11 +10,3 @@
 -- insert into categories (name) values ('politica'), ('economia'), ('food&drink'), ('sport'), ('intrattenimento'), ('tech');
 
 -- ALTER TABLE articles MODIFY publish_date DATETIME;
-
--- ALTER TABLE articles ADD COLUMN is_accepted BOOLEAN;
-
-
-
-
-
-

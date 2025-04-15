@@ -1,6 +1,7 @@
 package it.aulab.progetto_finale_danilo_gesuito.controllers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,6 @@ import it.aulab.progetto_finale_danilo_gesuito.models.Category;
 import it.aulab.progetto_finale_danilo_gesuito.services.ArticleService;
 import it.aulab.progetto_finale_danilo_gesuito.services.CategoryService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
@@ -44,7 +44,10 @@ public class CategoryController {
         viewModel.addAttribute("title", "tutti gli articoli trovati per categoria: " + category.getName());
         
         List<ArticleDto> articles = articleService.searchByCategory(modelMapper.map(category, Category.class));
-        viewModel.addAttribute("articles", articles);
+
+        List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+
+        viewModel.addAttribute("articles", acceptedArticles);
         
         return "article/articles";
     }

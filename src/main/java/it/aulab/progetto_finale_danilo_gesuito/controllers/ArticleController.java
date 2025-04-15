@@ -4,10 +4,12 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
+
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
@@ -41,10 +44,10 @@ public class ArticleController {
     
     @Autowired
     private ArticleService articleService;
-
+    
     @Autowired
     private ArticleRepository articleRepository;
-
+    
     @Autowired
     private ModelMapper modelMapper;
     
@@ -100,21 +103,24 @@ public class ArticleController {
         return "redirect:/";
     }
     
-    // Rotta per la visualizzazione di un singolo articolo //
+    // Rotta di dettaglio di un articolo //
     @GetMapping("detail/{id}")
-    public String detailArticle(@PathVariable("id") Long id, Model modelView) {
-
-        ArticleDto articleDto = articleService.read(id);
-        if (articleDto == null) {
-            // Potresti reindirizzare a una pagina di errore o alla lista articoli
-            return "redirect:/"; // O mostra una pagina 404 specifica
-        }
-
-        modelView.addAttribute("article", "Article detail");
-        modelView.addAttribute("article", articleService.read(id));
+    public String detailArticle(@PathVariable("id") Long id, Model viewModel) {
+        
+        viewModel.addAttribute("title", "Article detail");
+        viewModel.addAttribute("article", articleService.read(id));
         return "article/detail";
     }
 
+    @GetMapping("/edit/{id}")
+    public String editArticle(@PathVariable("id") Long id, Model viewModel) {
+        viewModel.addAttribute("title", "Modifica articolo");
+        viewModel.addAttribute("article", articleService.read(id));
+        viewModel.addAttribute("categories", categoryService.readAll());
+        return "article/edit";
+    }
+    
+    
     @GetMapping("revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model modelView) {
         modelView.addAttribute("title", "Article detail");
@@ -122,4 +128,34 @@ public class ArticleController {
         return "revisor/detail";
     }
     
+    // rotta dedicata all'azione del revisore
+    @PostMapping("/accept")
+    public String articleSetAccepted(@RequestParam("action") String action, @RequestParam("articleId") Long articleId, RedirectAttributes redirectAttributes) {
+        
+        if (action.equals("accept")) {
+            articleService.setIsAccepted(true, articleId);
+            redirectAttributes.addFlashAttribute("resultMessage", "Articolo accettato!");
+        }else if (action.equals("reject")) {
+            articleService.setIsAccepted(false, articleId);
+            redirectAttributes.addFlashAttribute("resultMessage", "Articolo rifiutato!");
+        } else {
+            redirectAttributes.addFlashAttribute("resultMessage", "Azione non valida!");
+        }
+        
+        return "redirect:/revisor/dashboard";
+    }
+    
+    // rotta per la ricerca di un articolo
+    @GetMapping("/search")
+    public String articleSearch(@Param("keyword") String keyword, Model viewModel) {
+        viewModel.addAttribute("title", "Tutti gli articoli trovati");
+        
+        List<ArticleDto> articles = articleService.search(keyword);
+
+        List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
+        
+        viewModel.addAttribute("articles", acceptedArticles);
+        
+        return "article/articles";
+    }
 }
