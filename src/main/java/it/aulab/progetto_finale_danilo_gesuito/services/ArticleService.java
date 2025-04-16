@@ -78,7 +78,7 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
             }
             
         }
-
+        
         article.setIsAccepted(null);
         
         ArticleDto dto = modelMapper.map(articleRepository.save(article), ArticleDto.class);
@@ -89,15 +89,76 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
     }
     
     @Override
-    public ArticleDto update(Long key, Article model, MultipartFile file) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public ArticleDto update(Long key, Article updatedArticle, MultipartFile file) {
+        String url = "";
+        
+        // controllo l'esistenza dell'articolo in base al suo id//
+        if (articleRepository.existsById(key)) {
+            // assegno all'articolo proveniente dal form lo stesso id dell'articolo originale
+            updatedArticle.setId(key);
+            // recupero l'articolo originale non modificato
+            Article article = articleRepository.findById(key).get();
+            // imposto l'uente dell'articolo del form con l'utente dell'articolo originale
+            updatedArticle.setUser(article.getUser());
+            
+            // faccio un controllo sulla presenza o meno del file nell'articolo del form, quindi capisco se devo modificare o meno l'immagine
+            if (!file.isEmpty()) {
+                try {
+                    imageService.deleteImage(article.getImage().getPath());
+                    try {
+                        // salva la nuova immagine
+                        CompletableFuture<String> futureUrl = imageService.saveImageOnCloud(file);
+                        url = futureUrl.get();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    
+                    // salvo il nuovo path nel DB
+                    imageService.saveImageOnDB(url, updatedArticle);
+                    
+                    // esssendo l'immagine modificata, l'articolo ritorna in revisione
+                    updatedArticle.setIsAccepted(null);
+                    return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (article.getImage() == null) {
+                updatedArticle.setIsAccepted(article.getIsAccepted());
+            } else {
+                updatedArticle.setImage(article.getImage());
+                
+                if (updatedArticle.equals(article)==false) {
+                    updatedArticle.setIsAccepted(null);
+                } else {
+                    updatedArticle.setIsAccepted(article.getIsAccepted());
+                }
+                
+                return modelMapper.map(articleRepository.save(updatedArticle), ArticleDto.class);
+            }
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+        return null;
     }
     
     @Override
     public void delete(Long key) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+        if (articleRepository.existsById(key)) {
+            Article article = articleRepository.findById(key).get();
+
+            try {
+
+                String path = article.getImage().getPath();
+                article.getImage().setArticle(null);
+                imageService.deleteImage(path);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            articleRepository.deleteById(key);
+        } else {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
     }
     
     public List<ArticleDto> searchByCategory(Category category) {
@@ -107,7 +168,7 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
         }
         return dtos;
     }
-
+    
     public List<ArticleDto> searchByAuthor(User user) {
         List<ArticleDto> dtos = new ArrayList<ArticleDto>();
         for (Article article: articleRepository.findByUser(user)) {
@@ -115,13 +176,13 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
         }
         return dtos;
     }
-
+    
     public void setIsAccepted(Boolean result, Long id) {
         Article article = articleRepository.findById(id).get();
         article.setIsAccepted(result);
         articleRepository.save(article);
     }
-
+    
     public List<ArticleDto> search(String keyword) {
         List<ArticleDto> dtos = new ArrayList<ArticleDto>();
         for (Article article: articleRepository.search(keyword)) {

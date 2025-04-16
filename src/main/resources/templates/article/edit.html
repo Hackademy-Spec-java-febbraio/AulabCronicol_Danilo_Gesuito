@@ -1,6 +1,6 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th: insert="~{index :: head}"></head>
+<head th:insert="~{index :: head}"></head>
 <body>
     <head th:insert="~{index :: navbar}"></head>
     
@@ -38,26 +38,27 @@
                         </div>
                         <div class="mb-3">
                             <label for="date" class="form-label">Publish date (8 chars) </label>
-                            <input id="date" type="date" class="form-control" th:field="*{publishDate}" placeholder="yyyyMMdd">
+                            <input id="date" type="date" class="form-control" th:field="*{publishDate}">
                         </div>
                         <div class="mb-3">
                             <label for="category" class="form-label">Category</label>
                             <select id="category" th:field="*{category}" class="form-select">
+                                <option value="">Seleziona Categoria</option>
                                 <option th:each="category:${categories}" th:value="${category.id}" th:text="${category.name}"></option>
-                                <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
                             </select>
+                            <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
                         </div>
                         <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
-                            <label for="image" class="form-label">Immagine dell'articolo</label>
-                            <img th:src="${article.image.path}" id="image" alt="${article.image.path}">
+                            <label for="imageCorrent" class="form-label">Immagine dell'articolo</label>
+                            <img th:src="${article.image.path}" id="imageCorrent" alt="${article.image.path}" style="width: 18rem;">
                         </div>
                         <div th:unless="${article.image != null}">
                             <label for="image" class="form-label">Immagine dell'articolo</label>
                             <p>Immagine non presente</p>
                         </div>
                         <div class="mb-3">
-                            <label for="image" class="form-label">Image</label>
-                            <input type="file" name="file" id="image" class="form-control"/>
+                            <label for="imageUpload" class="form-label">Image</label>
+                            <input type="file" name="file" id="imageUpload" class="form-control"/>
                         </div>
                         <button type="submit" class="btn btn-success">Modifica articolo</button>
                     </form>
@@ -67,4 +68,5 @@
     </div>
     <head th:insert="~{index :: footer}"></head>
     <script th:replace="~{index :: bootstrapScript}"></script>
-</body> </html>
+</body>
+</html>

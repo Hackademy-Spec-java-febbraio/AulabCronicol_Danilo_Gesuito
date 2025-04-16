@@ -30,6 +30,8 @@ import it.aulab.progetto_finale_danilo_gesuito.services.ArticleService;
 import it.aulab.progetto_finale_danilo_gesuito.services.CrudService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -111,7 +113,7 @@ public class ArticleController {
         viewModel.addAttribute("article", articleService.read(id));
         return "article/detail";
     }
-
+    
     @GetMapping("/edit/{id}")
     public String editArticle(@PathVariable("id") Long id, Model viewModel) {
         viewModel.addAttribute("title", "Modifica articolo");
@@ -120,6 +122,39 @@ public class ArticleController {
         return "article/edit";
     }
     
+    // rotta di memorizzazione modifica di un articolo
+    @PostMapping("/update/{id}")
+    public String articleUpdate(@PathVariable("id") Long id,
+                                @Valid @ModelAttribute("article") Article article,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes,
+                                Principal principal,
+                                MultipartFile file,
+                                Model viewModel) {
+        
+        // controllo degli errori con validazione
+        if (result.hasErrors()) {
+            viewModel.addAttribute("title", "Article Update");
+            article.setImage(articleService.read(id).getImage());
+            viewModel.addAttribute("article", article);
+            viewModel.addAttribute("categories", categoryService.readAll());
+            return "article/edit";
+        }
+        
+        articleService.update(id, article, file);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo modificato con successo!");
+        return "redirect:/articles";
+    }
+
+    // rotta per la cancellazione di un articolo
+    @GetMapping("/delete/{id}")
+    public String articleDelete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+
+        articleService.delete(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Articolo cancellato con successo!");
+        
+        return "redirect:/writer/dashboard";
+    }
     
     @GetMapping("revisor/detail/{id}")
     public String revisorDetailArticle(@PathVariable("id") Long id, Model modelView) {
@@ -151,7 +186,7 @@ public class ArticleController {
         viewModel.addAttribute("title", "Tutti gli articoli trovati");
         
         List<ArticleDto> articles = articleService.search(keyword);
-
+        
         List<ArticleDto> acceptedArticles = articles.stream().filter(article -> Boolean.TRUE.equals(article.getIsAccepted())).collect(Collectors.toList());
         
         viewModel.addAttribute("articles", acceptedArticles);

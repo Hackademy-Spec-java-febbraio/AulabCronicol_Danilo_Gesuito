@@ -63,10 +63,10 @@
                             <td th:text="${category.name}"></td>
                             <td class="text-end">
                                 <a th:href="@{/categories/edit/{id}(id=${category.id})}" class="btn btn-warning m-2">
-                                    <i class="fa-solid fa-pencil">Mod.</i>
+                                    <i class="bi bi-pen"></i>
                                 </a>
                                 <a th:href="@{/categories/delete/{id}(id=${category.id})}" class="btn btn-danger m-2" href="">
-                                    <i class="fa-solid fa-trash">Del.</i>
+                                    <i class="bi bi-trash"></i>
                                 </a>
                             </td>
                         </tr>
