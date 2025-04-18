@@ -30,10 +30,6 @@ import it.aulab.progetto_finale_danilo_gesuito.services.ArticleService;
 import it.aulab.progetto_finale_danilo_gesuito.services.CrudService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestBody;
-
-
-
 
 
 @Controller
@@ -59,15 +55,12 @@ public class ArticleController {
         viewModel.addAttribute("title", "Tutti gli articoli");
         
         List<ArticleDto> articles = new ArrayList<ArticleDto>();
-        for (Article article: articleRepository.findByIsAcceptedTrue()){
+        for(Article article: articleRepository.findByIsAcceptedTrue()){
             articles.add(modelMapper.map(article, ArticleDto.class));
         }
         
         // Ordina gli articoli per data in ordine decrescente
-        articles.sort(Comparator.comparing(
-        ArticleDto::getPublishDate,
-        Comparator.nullsLast(Comparator.naturalOrder()) // Gestisce i null
-        ).reversed());
+        articles.sort(Comparator.comparing(ArticleDto::getPublishDate, Comparator.nullsLast(Comparator.naturalOrder())).reversed());
         viewModel.addAttribute("articles", articles);
         
         return "article/articles";
@@ -116,7 +109,7 @@ public class ArticleController {
     
     @GetMapping("/edit/{id}")
     public String editArticle(@PathVariable("id") Long id, Model viewModel) {
-        viewModel.addAttribute("title", "Modifica articolo");
+        viewModel.addAttribute("title", "Article Update");
         viewModel.addAttribute("article", articleService.read(id));
         viewModel.addAttribute("categories", categoryService.readAll());
         return "article/edit";
@@ -124,7 +117,7 @@ public class ArticleController {
     
     // rotta di memorizzazione modifica di un articolo
     @PostMapping("/update/{id}")
-    public String articleUpdate(@PathVariable("id") Long id,
+    public String articleUpdate(@PathVariable("id")Long id,
                                 @Valid @ModelAttribute("article") Article article,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes,

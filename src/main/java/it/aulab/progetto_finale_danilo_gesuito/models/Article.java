@@ -67,7 +67,7 @@ public class Article {
         
         Article article = (Article) obj;
         
-        if (title.equals(article.getTitle()) && 
+        if(title.equals(article.getTitle()) && 
         subtitle.equals(article.getSubtitle()) && 
         body.equals(article.getBody()) && 
         publishDate.equals(article.getPublishDate()) &&

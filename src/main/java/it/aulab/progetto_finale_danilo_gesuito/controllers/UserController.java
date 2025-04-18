@@ -30,7 +30,6 @@ import it.aulab.progetto_finale_danilo_gesuito.repositories.ArticleRepository;
 import it.aulab.progetto_finale_danilo_gesuito.repositories.CareerRequestRepository;
 import it.aulab.progetto_finale_danilo_gesuito.dtos.ArticleDto;
 import it.aulab.progetto_finale_danilo_gesuito.dtos.UserDto;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -61,7 +60,7 @@ public class UserController {
         
         // recuper tutti gli articoli accettati
         List<ArticleDto> articles = new ArrayList<ArticleDto>();
-        for (Article article: articleRepository.findByIsAcceptedTrue()){
+        for(Article article: articleRepository.findByIsAcceptedTrue()){
             articles.add(modelMapper.map(article, ArticleDto.class));
         }
         
@@ -145,7 +144,7 @@ public class UserController {
     @GetMapping("/revisor/dashboard")
     public String revisorDashboard(Model viewModel) {
         viewModel.addAttribute("title", "Articoli da revisionare");
-        viewModel.addAttribute("requests", articleRepository.findByIsAcceptedIsNull());
+        viewModel.addAttribute("articles", articleRepository.findByIsAcceptedIsNull());
         return "revisor/dashboard";
     }
     
@@ -157,8 +156,7 @@ public class UserController {
         List<ArticleDto> userArticles = articleService.readAll()
                 .stream()
                 .filter(article -> article.getUser().getEmail().equals(principal.getName()))
-                .toList()
-                ;
+                .toList();
 
         viewModel.addAttribute("articles", userArticles);
 

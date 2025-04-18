@@ -23,7 +23,7 @@
                         <img th:if="${article.image != null && article.image.path != null}" th:src="${article.image.path}" class="card-img-top" alt="...">
                         <img th:unless="${article.image != null && article.image.path != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="...">
                         
-                        <div class="card-body">
+                        <div class="card-body text-center">
                             <h5 class="card-title" th:text="${article.title}">Card title</h5>
                             <p class="card-text" th:text="${article.subtitle}"></p>
                             <p class="card-text" th:text="${article.user.username}"></p>

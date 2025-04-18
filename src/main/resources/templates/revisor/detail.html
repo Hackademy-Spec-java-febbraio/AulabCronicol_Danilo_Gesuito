@@ -19,7 +19,7 @@
                 <div id="carouselExample" class="carousel slide">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
-                            <img th:if="${article.image-null}" th:src="${article.image.path}" class="card-img-top" alt="...">
+                            <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="...">
                             <img th:unless="${article.image != null}" th:src="@{/images/default.jpg}" class="card-img-top" alt="...">
                         </div>
                     </div>
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    <head th: insert="~{index :: footer}"></head>
+    <head th:insert="~{index :: footer}"></head>
     <script th:replace="~{index :: bootstrapScript}"></script>
     <script>
         function goBack() {

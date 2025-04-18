@@ -3,13 +3,17 @@
 <head th:insert="~{index :: head}"></head>
 <body>
     <head th:insert="~{index :: navbar}"></head>
+
+    <div th:if="${successMessage}" class="alert alert-success text-center">
+        <p th:text="${successMessage}"></p>
+    </div>
     
     <div class="min-vh-100">
         <div class="container-fluid p-5 bg-secondary-subtle text-center">
             <div class="row justify-content-center">
                 <div class="col-12">
                     <span class="h1">Modifica articolo</span>
-                    <h2 th:text="${article.title}">Titolo</h2>
+                    <h2 th:text="${article.title}" class="pt-3">Titolo</h2>
                 </div>
             </div>
         </div>
@@ -60,7 +64,9 @@
                             <label for="imageUpload" class="form-label">Image</label>
                             <input type="file" name="file" id="imageUpload" class="form-control"/>
                         </div>
-                        <button type="submit" class="btn btn-success">Modifica articolo</button>
+                        <div class="d-flex justify-content-center"> 
+                            <button type="submit" class="btn btn-primary">Modifica articolo</button>
+                        </div>
                     </form>
                 </div>
             </div>

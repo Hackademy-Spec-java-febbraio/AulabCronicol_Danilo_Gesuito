@@ -76,12 +76,12 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            
         }
         
         article.setIsAccepted(null);
         
         ArticleDto dto = modelMapper.map(articleRepository.save(article), ArticleDto.class);
+
         if (!file.isEmpty()) {
             imageService.saveImageOnDB(url, article);
         }
@@ -102,8 +102,9 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
             updatedArticle.setUser(article.getUser());
             
             // faccio un controllo sulla presenza o meno del file nell'articolo del form, quindi capisco se devo modificare o meno l'immagine
-            if (!file.isEmpty()) {
+            if(!file.isEmpty()) {
                 try {
+                    // elimino l'immagine precedente
                     imageService.deleteImage(article.getImage().getPath());
                     try {
                         // salva la nuova immagine
@@ -185,7 +186,7 @@ public class ArticleService implements CrudService <ArticleDto, Article, Long>{
     
     public List<ArticleDto> search(String keyword) {
         List<ArticleDto> dtos = new ArrayList<ArticleDto>();
-        for (Article article: articleRepository.search(keyword)) {
+        for(Article article: articleRepository.search(keyword)) {
             dtos.add(modelMapper.map(article, ArticleDto.class));
         }
         return dtos;

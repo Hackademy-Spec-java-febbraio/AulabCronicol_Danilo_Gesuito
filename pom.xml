@@ -13,18 +13,18 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>aulabchronicles</name>
     <description>Demo project for Spring Boot</description>
-    <url />
+    <url/>
     <licenses>
-        <license />
+        <license/>
     </licenses>
     <developers>
-        <developer />
+        <developer/>
     </developers>
     <scm>
-        <connection />
+        <connection/>
         <developerConnection />
-        <tag />
-        <url />
+        <tag/>
+        <url/>
     </scm>
     <properties>
         <java.version>21</java.version>
@@ -97,6 +97,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity6</artifactId>
         </dependency>
 
     </dependencies>
