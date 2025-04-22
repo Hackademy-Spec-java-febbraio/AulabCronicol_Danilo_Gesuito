@@ -50,7 +50,7 @@ public class ArticleController {
     private ModelMapper modelMapper;
     
     // Rotta per la visualizzazione di tutti gli articoli //
-    @GetMapping("/articles")
+    @GetMapping
     public String articleIndex(Model viewModel){
         viewModel.addAttribute("title", "Tutti gli articoli");
         
@@ -107,6 +107,7 @@ public class ArticleController {
         return "article/detail";
     }
     
+    // rotta per la modifica di un articolo
     @GetMapping("/edit/{id}")
     public String editArticle(@PathVariable("id") Long id, Model viewModel) {
         viewModel.addAttribute("title", "Article Update");

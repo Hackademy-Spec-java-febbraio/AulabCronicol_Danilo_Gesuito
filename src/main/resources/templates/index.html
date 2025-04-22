@@ -13,6 +13,14 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQfEDBFu7KVS4kv0Q==" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <style>
+        .btn:hover {
+            background-color: #ffffff;
+            color: #087b06;
+            border-color: #087b06;
+        }
+    </style>
     
     <!-- * Titolo Pagina -->
     <title th:text="${title}">Title</title>
@@ -22,100 +30,99 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
     
     <!--* Inizio NAVBAR -->
-    <nav th:fragment="navbar" class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark bg-success p-2">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Aulab Chronicles</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
             aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')" class="nav-item">
-                    <a class="nav-link" href="/articles/create">Crea Articolo</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="/articles/articles">Tutti gli articoli</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
-                    <div class="d-flex">
-                        <a class="nav-link" href="/admin/dashboard">Dashboard admin</a>
-                        <div class="mt-1" th:if="${careerRequests > 0}">
-                            <i class="fas fa-bell fa-1 pt-2"></i>
-                            <span class="badge rounded-pill bg-danger text-white px-1" th:text="${careerRequests}"></span>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
-                    <div class="d-flex">
-                        <a class="nav-link" href="/revisor/dashboard">Dashboard revisore</a>
-                        <div class="mt-1" th:if="${articleToBeRevised > 0}">
-                            <i class="fas fa-bell fa-1 pt-2"></i>
-                            <span class="badge rounded-pill bg-danger text-white px-1" th:text="${articleToBeRevised}"></span>
-                        </div>
-                    </div>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
-                    <a class="nav-link" href="/writer/dashboard">Dashboard writer</a>
-                </li>
-                <li class="nav-item dropdown ">
-                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Accesso
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li sec:authorize="isAnonymous"><a class="dropdown-item" aria-current="page" th:href="@{/register}">Register</a></li>
-                        <li sec:authorize="isAnonymous"><a class="dropdown-item" aria-current="page" th:href="@{/login}">Login</a></li>
-                        <li sec:authorize="isAuthenticated"><a  class="dropdown-item" aria-current="page" th:href="@{/logout}">Logout</a></li>
-                    </ul>
-                </li>
-            </ul>
+            <span class="navbar-toggler-icon"></span></button>
             
-            <div th:if="${#authentication != null}">
-                <span th:text="Benvenuto: + (${#authentication.principal.fullname} ?: Ospite) + ' - ' + (${#authentication.principal.authorities[0].authority} ?: '')?.replace('ROLE_', '')"></span>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li sec:authorize="isAuthenticated && hasRole('ROLE_WRITER')" class="nav-item">
+                        <a class="nav-link" href="/articles/create">Crea Articolo</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/articles">Tutti gli articoli</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_ADMIN')">
+                        <div class="d-flex">
+                            <a class="nav-link" href="/admin/dashboard">Dashboard admin</a>
+                            <div class="mt-1" th:if="${careerRequests > 0}">
+                                <i class="fas fa-bell fa-1 pt-2"></i>
+                                <span class="badge rounded-pill bg-danger text-white px-1" th:text="${careerRequests}"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_REVISOR')">
+                        <div class="d-flex">
+                            <a class="nav-link" href="/revisor/dashboard">Dashboard revisore</a>
+                            <div class="mt-1" th:if="${articleToBeRevised > 0}">
+                                <i class="fas fa-bell fa-1 pt-2"></i>
+                                <span class="badge rounded-pill bg-danger text-white px-1" th:text="${articleToBeRevised}"></span>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="nav-item" sec:authorize="hasRole('ROLE_WRITER')">
+                        <a class="nav-link" href="/writer/dashboard">Dashboard writer</a>
+                    </li>
+                    <li class="nav-item dropdown ">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Accesso
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li sec:authorize="isAnonymous"><a class="dropdown-item" aria-current="page" th:href="@{/register}">Register</a></li>
+                            <li sec:authorize="isAnonymous"><a class="dropdown-item" aria-current="page" th:href="@{/login}">Login</a></li>
+                            <li sec:authorize="isAuthenticated"><a  class="dropdown-item" aria-current="page" th:href="@{/logout}">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <div th:if="${#authentication != null}" class="text-center me-5 text-light">
+                    <span th:text="'Benvenuto, ' + ${#authentication.name}"></span>
+                </div>
+                <div th:unless="${#authentication != null}" class="text-center me-5">
+                    <span>Accedi</span>  <!-- O un link per accedere -->
+                </div>
+                <form class="d-flex" th:action="@{/articles/search}" method="get">
+                    <input class="form-control me-2" type="search" placeholder="Cerca.." name="keyword" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">
+                        <i class="bi bi-search"></i>
+                    </button>
+                </form>
             </div>
-            <div th:unless="${#authentication != null}" class="text-center me-5">
-                <span>Accedi per visualizzare il tuo nome.</span>  <!-- O un link per accedere -->
+        </div>
+    </nav>
+    <!--* Fine NAVBAR -->
+    
+    <!--* Inizio FOOTER -->
+    <footer th:fragment="footer" class="bg-success d-flex flex-wrap justify-content-between align-items-center py-3 border-top">
+        <div class="container">
+            
+            <!-- Company Info -->
+            <div class="col-12 mb-3 text-center">
+                <a href="/" class="text-white">
+                    <h5>Aulab IT</h5>
+                </a>
             </div>
-            <form class="d-flex" th:action="@{/articles/search}" method="get">
-                <input class="form-control me-2" type="search" placeholder="Cerca.." name="keyword" aria-label="Search">
-                <button class="btn btn-outline-info" type="submit">
-                    <i class="bi bi-search"></i>
-                </button>
-            </form>
+            
+            <!-- Contact Info -->
+            <div class="col-12 mb-3 text-center">
+                <h5>Vuoi lavorare con noi? Clicca qui</h5>
+                <a th:href="@{/operations/career/request}" class="btn btn-dark">Richiedi Info</a>
+            </div>
+            <div class="bg-light text-center py-2">
+                <p class="mb-0">© Aulab Jost. All rights reserved.</p>
+            </div>
         </div>
-    </div>
-</nav>
-<!--* Fine NAVBAR -->
-
-<!--* Inizio FOOTER -->
-<footer th:fragment="footer" class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-    <div class="container">
-        
-        <!-- Company Info -->
-        <div class="col-12 mb-3 text-center">
-            <a href="/">
-                <h5>Aulab IT</h5>
-            </a>
-        </div>
-        
-        <!-- Contact Info -->
-        <div class="col-12 mb-3 text-center">
-            <h5>Lavora con noi</h5>
-            <a th:href="@{/operations/career/request}" class="btn btn-primary">Richiedi</a>
-        </div>
-        <div class="bg-secondary text-center py-2">
-            <p class="mb-0">© Aulab Jost. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-<!--* Fine FOOTER -->
-
-<!--* Script Bootstrap -->
-
-<script th:fragment="bootstrapScript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-crossorigin="anonymous"></script>
+    </footer>
+    <!--* Fine FOOTER -->
+    
+    <!--* Script Bootstrap -->
+    
+    <script th:fragment="bootstrapScript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
 </body>
 </html>

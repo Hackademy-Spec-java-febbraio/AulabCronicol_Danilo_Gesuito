@@ -4,8 +4,8 @@
 <body>
     <head th:insert="~{index :: navbar}"></head>
     <div class="vh-100">
-        <div th:if="${resultMessage}" class="alert alert-success">
-            <p th:text="${resultMessage}"></p>
+        <div th:if="${successMessage}" class="alert alert-success">
+            <p th:text="${successMessage}"></p>
         </div>
         <div class="container">
             <div class="row">

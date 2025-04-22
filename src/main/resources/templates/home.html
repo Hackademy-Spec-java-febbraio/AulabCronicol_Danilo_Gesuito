@@ -3,7 +3,7 @@
 
 <head th:insert="~{index::head}"></head>
 
-<body>
+<body class="bg-light">
     <head th:insert="~{index::navbar}"></head>
     
     <div th:if="~{param.notAuthorized}">
@@ -20,14 +20,17 @@
         <div th:text="${errorMessage}"></div>
     </div>
     
-    <article class="container-fluid">
+    <article class="container-fluid text-success">
         <section class="row ms-5 vh-100 align-items-center">
             <div class="col-10">
-                <h1 class="mb-5">Welcome to <span class="display-4 fw-bold d-block">Aulab Chronicles</span></h1>
+                <h1 class="mb-5">Welcome to <span class="display-4 fw-bold d-block">Aulab Chronicles</span>
+                <span class="display-6">where your dreams come true!</span></h1>
             </div>
         </section>
     </article>
     
+    <hr class="bg-light">
+
     <div class="container" th:if="${articles.size() > 0}">
         <div class="row justify-content-center">
             <div class="col-10 mb-5">

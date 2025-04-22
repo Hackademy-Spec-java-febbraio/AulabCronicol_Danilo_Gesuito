@@ -4,6 +4,10 @@
 <body>
     <head th:insert="~{index :: navbar}"></head>
     
+    <div th:if="${successMessage}" class="alert alert-success text-center">
+        <p th:text="${successMessage}"></p>
+    </div>
+    
     <div class="container-fluid p-5 bg-secondary-subtle text-center">
         <div class="row justify-content-center">
             <div class="col-12">
@@ -16,7 +20,7 @@
     <div class="container my-5">
         <div class="row justify-content-center">
             <div class="col-12 col-md-8 d-flex flex-column">
-                <div id="carouselExample" class="carousel slide">
+                <div id="carouselExample" class="carousel slide mb-3" style="max-width: 30rem; height: auto;">
                     <div class="carousel-inner">
                         <div class="carousel-item active">
                             <img th:if="${article.image != null}" th:src="${article.image.path}" class="card-img-top" alt="...">
@@ -48,10 +52,9 @@
                         </a>
                     </div>
                 </div>
-                
             </div>
             <hr>
-            <p th:text="${article.body}"></p>
+            <p class="text-center" th:text="${article.body}"></p>
             <div class="text-center">
                 <a href="#" class="text-secondary pointer" onclick="goBack()">Torna indietro</a>
             </div>

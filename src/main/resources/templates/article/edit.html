@@ -53,8 +53,8 @@
                             <p th:errors="*{category}" class="text-danger" th:if="${#fields.hasErrors('category')}"></p>
                         </div>
                         <div class="mb-3 d-flex flex-column" th:if="${article.image != null}">
-                            <label for="imageCorrent" class="form-label">Immagine dell'articolo</label>
-                            <img th:src="${article.image.path}" id="imageCorrent" alt="${article.image.path}" style="width: 18rem;">
+                            <label for="image" class="form-label">Immagine dell'articolo</label>
+                            <img th:src="${article.image.path}" id="image" alt="${article.image.path}" style="width: 18rem;">
                         </div>
                         <div th:unless="${article.image != null}">
                             <label for="image" class="form-label">Immagine dell'articolo</label>

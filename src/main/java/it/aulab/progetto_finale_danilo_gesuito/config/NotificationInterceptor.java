@@ -17,8 +17,8 @@ public class NotificationInterceptor implements HandlerInterceptor {
     CareerRequestRepository careerRequestRepository;
 
     @Autowired
-    private ArticleRepository articleRepository;
-    
+    ArticleRepository articleRepository;
+
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         if (modelAndView != null && request.isUserInRole("ROLE_ADMIN")) {
